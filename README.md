@@ -5,7 +5,7 @@
 * PyTorch 1.5
 * [visdom](https://github.com/facebookresearch/visdom)
 * Predator-Prey and Traffic Junction [Environments](https://github.com/apsdehal/ic3net-envs)
-* Fork from a old version of [Google Research Football](https://github.com/google-research/football) (fork version temporarily disabled for anonymity)
+* Fork from authors' version of [Google Research Football](https://github.com/chrisyrniu/football) 
 
 
 ## Install Multi-Agent Environment Wrapper for GRF

@@ -21,9 +21,13 @@ This is the codebase for "[Multi-Agent Graph-Attention Communication and Teaming
   `sh train_pp_medium.sh`
 * Predator-Prey 10-agent scenario:
   `sh train_pp_hard.sh`
-* Traffic-Junction:
-  `sh train_tj_no_curriculum.sh`
-* Google Research Football 3 vs. 2 scenario:
+* Traffic-Junction 5-agent scenario:
+  `sh train_tj_easy.sh`
+* Traffic-Junction 10-agent scenario:
+  `sh train_tj_medium.sh`
+* Traffic-Junction 20-agent scenario:
+  `sh train_tj_hard.sh`
+* Google Research Football 3 vs. 2 (3-agent) scenario:
   `sh train_grf.sh`
 
 ## Check Training Process and Results

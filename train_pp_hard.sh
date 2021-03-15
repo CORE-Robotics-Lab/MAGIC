@@ -28,7 +28,7 @@ python -u main.py \
   --message_decoder \
   --recurrent \
   --save \
-  --save_every 500\
+  --seed 0 \
   | tee train_pp_hard.log
 
 

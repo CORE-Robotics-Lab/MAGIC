@@ -28,6 +28,8 @@ python -u main.py \
   --first_gat_normalize \
   --second_gat_normalize \
   --recurrent \
+  --save \
+  --seed 0 \
   | tee train_pp_medium.log
 
 

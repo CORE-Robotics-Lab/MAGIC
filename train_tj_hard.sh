@@ -3,15 +3,15 @@ export OMP_NUM_THREADS=1
 
 python -u main.py \
   --env_name traffic_junction \
-  --nagents 10 \
-  --dim 14 \
-  --max_steps 40 \
-  --add_rate_min 0.2 \
-  --add_rate_max 0.2 \
-  --difficulty medium \
+  --nagents 20 \
+  --dim 18 \
+  --max_steps 80 \
+  --add_rate_min 0.05 \
+  --add_rate_max 0.05 \
+  --difficulty hard \
   --vision 1 \
   --nprocesses 16 \
-  --num_epochs 2000 \
+  --num_epochs 3000 \
   --epoch_size 10 \
   --hid_size 128 \
   --detach_gap 10 \
@@ -32,7 +32,7 @@ python -u main.py \
   --curr_end 0 \
   --save \
   --seed 0 \
-  | tee train_tj_medium.log
+  | tee train_tj_hard.log
 
   ## easy
   # --nagents 5 \

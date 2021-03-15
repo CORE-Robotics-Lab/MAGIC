@@ -32,5 +32,5 @@ python -u main.py \
   --num_controlled_ragents 0 \
   --reward_type scoring \
   --save \
-  --save_every 200 \
+  --seed 0 \
   | tee train_grf.log

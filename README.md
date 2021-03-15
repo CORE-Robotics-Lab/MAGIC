@@ -10,17 +10,20 @@ This is the codebase for "[Multi-Agent Graph-Attention Communication and Teaming
 
 
 ## Install Multi-Agent Environment Wrapper for GRF
+* Each agent will receive a local observation
+
   `cd grf-envs`
 
   `python setup.py develop`
 
 ## Run Training
+* Predator-Prey 5-agent scenario:
   `sh train_pp_medium.sh`
-
+* Predator-Prey 10-agent scenario:
   `sh train_pp_hard.sh`
-
+* Traffic-Junction:
   `sh train_tj_no_curriculum.sh`
-
+* Google Research Football 3 vs. 2 scenario:
   `sh train_grf.sh`
 
 ## Check Training Process and Results

@@ -10,7 +10,7 @@ This is the codebase for "[Multi-Agent Graph-Attention Communication and Teaming
 
 
 ## Install Multi-Agent Environment Wrapper for GRF
-* Each agent will receive a local observation
+* Each agent will receive a local observation in multi-agent settings 
 
   `cd grf-envs`
 

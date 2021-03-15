@@ -1,4 +1,5 @@
 # MAGIC Implementation
+This is the codebase for "[Multi-Agent Graph-Attention Communication and Teaming](https://chrisyrniu.github.io/files/aamas2021.pdf)," which is published in [AAMAS 2021](https://aamas2021.soton.ac.uk/). The implementation is in three domains including Predator-Prey, Traffic-Junction, and Google Researh Football.
 
 ## Requirements
 * OpenAI Gym

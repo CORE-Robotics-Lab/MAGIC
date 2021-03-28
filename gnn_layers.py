@@ -9,9 +9,9 @@ class GraphAttention(nn.Module):
 
     def __init__(self, in_features, out_features, dropout, negative_slope, num_heads=1, bias=True, self_loop_type=2, average=False, normalize=False):
         super(GraphAttention, self).__init__()
-        self.dropout = dropout
         self.in_features = in_features
         self.out_features = out_features
+        self.dropout = dropout
         self.negative_slope = negative_slope
         self.num_heads = num_heads
         self.self_loop_type = self_loop_type
@@ -41,9 +41,18 @@ class GraphAttention(nn.Module):
             nn.init.zeros_(self.bias.data)
 
     def forward(self, input, adj):
-        # input size: N * in_features
+    	"""
+		Forward function for the graph attention layer used in MAGIC
+
+		Arguments:
+			input (tensor): input of the graph attention layer [N * in_features, N: number of agents]
+			adj (tensor): the learned communication graph (adjancy matrix) by the sub-scheduler [N * N]
+    	"""
+
         # self.W size: in_features * (num_heads*out_features)
-        # h size: N * num_heads * out_features
+
+        # perform linear transformation on the input, and generate multiple heads
+        # h (tensor): the matrix after performing the linear transformation [N * num_heads * out_features]
         h = torch.mm(input, self.W).view(-1, self.num_heads, self.out_features)
         N = h.size()[0]
     
@@ -55,18 +64,20 @@ class GraphAttention(nn.Module):
             pass
         
         e = []
-        # a_i, a_j size: num_heads * out_features * 1
+
+        # compute the unnormalized coefficients
+        # a_i, a_j (tensors): weight vectors to compute the unnormalized coefficients [num_heads * out_features * 1]
         for head in range(self.num_heads):
-            # coeff_i, coeff_j size: N * 1
+            # coeff_i, coeff_j (tensors): intermediate matrices to calculate unnormalized coefficients [N * 1]
             coeff_i = torch.mm(h[:, head, :], self.a_i[head, :, :])
             coeff_j = torch.mm(h[:, head, :], self.a_j[head, :, :])
-            # coeff size: N * N * 1
+            # coeff (tensor): the matrix of unnormalized coefficients for each head [N * N * 1]
             coeff = coeff_i.expand(N, N) + coeff_j.transpose(0, 1).expand(N, N)
             coeff = coeff.unsqueeze(-1)
             
             e.append(coeff)
             
-        # e size: N * N * num_heads
+        # e (tensor): the matrix of unnormalized coefficients for all heads [N * N * num_heads]
         e = self.leakyrelu(torch.cat(e, dim=-1)) 
             
         # adj size: N * N * num_heads
@@ -102,52 +113,3 @@ class GraphAttention(nn.Module):
     def __repr__(self):
         return self.__class__.__name__ + ' (' + str(self.in_features) + ' -> ' + str(self.out_features) + ')'
     
-    
-# Revised from https://github.com/tkipf/pygcn/blob/master/pygcn/layers.py, revised GCN layers not used in MAGIC
-class GraphConvolution(nn.Module):
-    """
-    Simple GCN layer, similar to https://arxiv.org/abs/1609.02907
-    """
-
-    def __init__(self, in_features, out_features, bias=True, self_loop_type=2):
-        super(GraphConvolution, self).__init__()
-        self.in_features = in_features
-        self.out_features = out_features
-        self.self_loop_type = self_loop_type
-        self.weight = nn.Parameter(torch.DoubleTensor(in_features, out_features))
-        if bias:
-            self.bias = nn.Parameter(torch.DoubleTensor(out_features))
-        else:
-            self.register_parameter('bias', None)
-        self.reset_parameters()
-
-    def reset_parameters(self):
-        stdv = 1. / math.sqrt(self.weight.size(1))
-        self.weight.data.uniform_(-stdv, stdv)
-        if self.bias is not None:
-            self.bias.data.uniform_(-stdv, stdv)
-
-    def forward(self, input, adj):
-        N = input.size()[0]
-        
-        if self.self_loop_type == 0:
-            adj = adj * (torch.ones(N, N) - torch.eye(N, N))
-        elif self.self_loop_type == 1:
-            adj = torch.eye(N, N) + adj * (torch.ones(N, N) - torch.eye(N, N))   
-        else:
-            pass
-        
-        degrees = adj.sum(dim=1)
-        normalized_D = torch.diag_embed(degrees.pow(-0.5))
-        normalized_adj = torch.mm(torch.mm(normalized_D, adj), normalized_D)
-        support = torch.mm(input, self.weight)
-        output = torch.mm(normalized_adj, support)
-        if self.bias is not None:
-            return output + self.bias
-        else:
-            return output
-
-    def __repr__(self):
-        return self.__class__.__name__ + ' (' \
-               + str(self.in_features) + ' -> ' \
-               + str(self.out_features) + ')'

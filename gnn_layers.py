@@ -78,11 +78,12 @@ class GraphAttention(nn.Module):
             e.append(coeff)
             
         # e (tensor): the matrix of unnormalized coefficients for all heads [N * N * num_heads]
+        # sometimes the unnormalized coefficients can be large, so regularization might be used to limit the large unnormalized coefficient values (TODO)
         e = self.leakyrelu(torch.cat(e, dim=-1)) 
             
-        # adj size: N * N * num_heads
+        # adj: [N * N * num_heads]
         adj = adj.unsqueeze(-1).expand(N, N, self.num_heads)
-        # attention size: N * N * num_heads
+        # attention (tensor): [N * N * num_heads]
         attention = e * adj
         attention = F.softmax(attention, dim=1)
         attention = attention * adj   
@@ -92,7 +93,7 @@ class GraphAttention(nn.Module):
                 attention += 1e-15
             attention = attention / attention.sum(dim=1).unsqueeze(dim=1).expand(N, N, self.num_heads)
             attention = attention * adj
-            
+        # dropout on the coefficients  
         attention = F.dropout(attention, self.dropout, training=self.training)
         
         # output size: N * (num_heads*out_features)

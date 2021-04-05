@@ -41,13 +41,13 @@ class GraphAttention(nn.Module):
             nn.init.zeros_(self.bias.data)
 
     def forward(self, input, adj):
-    	"""
-		Forward function for the graph attention layer used in MAGIC
+        """
+        Forward function for the graph attention layer used in MAGIC
 
-		Arguments:
-			input (tensor): input of the graph attention layer [N * in_features, N: number of agents]
-			adj (tensor): the learned communication graph (adjancy matrix) by the sub-scheduler [N * N]
-    	"""
+        Arguments:
+            input (tensor): input of the graph attention layer [N * in_features, N: number of agents]
+            adj (tensor): the learned communication graph (adjancy matrix) by the sub-scheduler [N * N]
+        """
 
         # self.W size: in_features * (num_heads*out_features)
 

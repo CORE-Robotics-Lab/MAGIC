@@ -4,7 +4,6 @@ from torch import nn
 import numpy as np
 from action_utils import select_action, translate_action
 from gnn_layers import GraphAttention
-from gnn_layers import GraphConvolution
 
 class MAGIC(nn.Module):
     def __init__(self, args, num_inputs):

@@ -14,7 +14,6 @@ python -u main.py \
   --value_coeff 0.015 \
   --detach_gap 10 \
   --lrate 0.001 \
-  --gnn_type gat \
   --directed \
   --gat_num_heads 4 \
   --gat_hid_size 32 \

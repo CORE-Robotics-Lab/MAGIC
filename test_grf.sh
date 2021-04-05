@@ -9,7 +9,6 @@ python -u test.py \
   --epoch_size 10 \
   --hid_size 128 \
   --max_steps 80 \
-  --gnn_type gat \
   --directed \
   --gat_num_heads 8 \
   --gat_hid_size 32 \

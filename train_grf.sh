@@ -12,7 +12,6 @@ python -u main.py \
   --lrate 0.001 \
   --value_coeff 0.01 \
   --max_steps 80 \
-  --gnn_type gat \
   --directed \
   --gat_num_heads 1 \
   --gat_hid_size 128 \

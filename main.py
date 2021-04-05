@@ -44,8 +44,6 @@ parser.add_argument('--self_loop_type1', default=2, type=int,
                     help='self loop type in gnn (0: no self loop, 1: with self loop, 2: decided by hard attn mechanism)')
 parser.add_argument('--self_loop_type2', default=2, type=int,
                     help='self loop type in gnn (0: no self loop, 1: with self loop, 2: decided by hard attn mechanism)')
-parser.add_argument('--gnn_type', default='gat', type=str,
-                    help='type of gnn to use (gcn|gat)')
 parser.add_argument('--gat_num_heads', default=1, type=int,
                     help='number of heads in gat layers except the last one')
 parser.add_argument('--gat_num_heads_out', default=1, type=int,
@@ -200,7 +198,7 @@ log['entropy'] = LogField(list(), True, 'epoch', 'num_steps')
 if args.plot:
     vis = visdom.Visdom(env=args.plot_env, port=args.plot_port)
 
-model_dir = Path('./saved') / args.env_name / args.gnn_type
+model_dir = Path('./saved') / args.env_name 
 if args.env_name == 'grf':
     model_dir = model_dir / args.scenario
 if not model_dir.exists():

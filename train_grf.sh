@@ -5,7 +5,7 @@ python -u main.py \
   --env_name grf \
   --nagents 3 \
   --nprocesses 16 \
-  --num_epochs 500 \
+  --num_epochs 300 \
   --epoch_size 10 \
   --hid_size 128 \
   --detach_gap 10 \
@@ -32,8 +32,8 @@ python -u main.py \
   --reward_type scoring \
   --save \
   --save_every 200 \
-  --seed 0 \
+  --seed 5678 \
   --plot \
-  --plot_env magic_grf_seed_0 \
-  --plot_port 8097 \
+  --plot_env magic_grf_seed_5678 \
+  --plot_port 8009 \
   | tee train_grf.log

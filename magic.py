@@ -112,7 +112,7 @@ class MAGIC(nn.Module):
         else:
             adj1 = self.get_complete_graph(agent_mask)
             
-		comm = F.elu(self.gconv1(comm, adj1))
+        comm = F.elu(self.gconv1(comm, adj1))
         
         if self.args.learn_second_graph and not self.args.second_graph_complete:
             if self.args.use_gconv_encoder:

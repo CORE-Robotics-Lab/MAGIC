@@ -26,7 +26,6 @@ python -u main.py \
   --learn_second_graph \
   --first_gat_normalize \
   --second_gat_normalize \
-  --recurrent \
   --save \
   --seed 0 \
   | tee train_pp_medium.log

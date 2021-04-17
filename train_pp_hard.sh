@@ -25,7 +25,6 @@ python -u main.py \
   --first_gat_normalize \
   --second_gat_normalize \
   --message_decoder \
-  --recurrent \
   --save \
   --seed 0 \
   | tee train_pp_hard.log

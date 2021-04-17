@@ -36,8 +36,6 @@ parser.add_argument('--nprocesses', type=int, default=16,
 # model
 parser.add_argument('--hid_size', default=64, type=int,
                     help='hidden layer size')
-parser.add_argument('--recurrent', action='store_true', default=False,
-                    help='make the model recurrent in time')
 parser.add_argument('--directed', action='store_true', default=False,
                     help='if the graph formed by the agents is directed')
 parser.add_argument('--self_loop_type1', default=2, type=int,
@@ -135,14 +133,13 @@ if args.env_name == 'grf':
     args.render = False
 env = data.init(args.env_name, args, False)
 
-num_inputs = env.observation_dim
+args.obs_size = env.observation_dim
 args.num_actions = env.num_actions
 
 # Multi-action
 if not isinstance(args.num_actions, (list, tuple)): # single action case
     args.num_actions = [args.num_actions]
 args.dim_actions = env.dim_actions
-args.num_inputs = num_inputs
 
 parse_action_args(args)
 
@@ -152,7 +149,7 @@ torch.manual_seed(args.seed)
 
 print(args)
 
-policy_net = MAGIC(args, num_inputs)
+policy_net = MAGIC(args)
 
 
 if not args.display:

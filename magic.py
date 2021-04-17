@@ -6,12 +6,21 @@ from action_utils import select_action, translate_action
 from gnn_layers import GraphAttention
 
 class MAGIC(nn.Module):
-    def __init__(self, args, num_inputs):
+    """
+    The communication protocol of Multi-Agent Graph AttentIon Communication (MAGIC)
+    """
+    def __init__(self, args):
         super(MAGIC, self).__init__()
+        """
+        Initialization method for the MAGIC communication protocol
+
+        Arguements:
+            args
+        """
+
         self.args = args
         self.nagents = args.nagents
         self.hid_size = args.hid_size
-        self.recurrent = args.recurrent
         
         dropout = 0
         negative_slope = 0.2
@@ -19,10 +28,8 @@ class MAGIC(nn.Module):
         self.gconv2 = GraphAttention(args.gat_hid_size*args.gat_num_heads, args.hid_size, dropout=dropout, negative_slope=negative_slope, num_heads=args.gat_num_heads_out, self_loop_type=args.self_loop_type2, average=True, normalize=args.second_gat_normalize)
         if args.use_gconv_encoder:
             self.gconv_encoder = GraphAttention(args.hid_size, args.gconv_encoder_out_size, dropout=dropout, negative_slope=negative_slope, num_heads=args.ge_num_heads, self_loop_type=1, average=True, normalize=args.gconv_gat_normalize)
-    
-        self.init_std = args.init_std if hasattr(args, 'comm_init_std') else 0.2
 
-        self.encoder = nn.Linear(num_inputs, args.hid_size)
+        self.encoder = nn.Linear(arg.obs_size, args.hid_size)
 
         self.init_hidden(args.batch_size)
         self.f_module = nn.LSTMCell(args.hid_size, args.hid_size)
@@ -168,7 +175,6 @@ class MAGIC(nn.Module):
 
     def init_linear(self, m):
         if type(m) == nn.Linear:
-#             m.weight.data.normal_(0, self.init_std)
             m.weight.data.fill_(0.)
             m.bias.data.fill_(0.)
         

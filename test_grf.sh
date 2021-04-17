@@ -19,7 +19,6 @@ python -u test.py \
   --self_loop_type2 2 \
   --message_encoder \
   --message_decoder \
-  --recurrent \
   --scenario academy_3_vs_1_with_keeper \
   --num_controlled_lagents 3 \
   --num_controlled_ragents 0 \

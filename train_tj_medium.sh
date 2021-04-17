@@ -26,7 +26,6 @@ python -u main.py \
   --first_graph_complete \
   --second_graph_complete \
   --message_decoder \
-  --recurrent \
   --curr_start 0 \
   --curr_end 0 \
   --save \

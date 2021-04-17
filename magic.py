@@ -12,10 +12,10 @@ class MAGIC(nn.Module):
     def __init__(self, args):
         super(MAGIC, self).__init__()
         """
-        Initialization method for the MAGIC communication protocol
+        Initialization method for the MAGIC communication protocol (2 rounds of communication)
 
         Arguements:
-            args
+            args (Namespace): Parse arguments
         """
 
         self.args = args
@@ -32,39 +32,39 @@ class MAGIC(nn.Module):
         self.encoder = nn.Linear(arg.obs_size, args.hid_size)
 
         self.init_hidden(args.batch_size)
-        self.f_module = nn.LSTMCell(args.hid_size, args.hid_size)
+        self.lstm_cell= nn.LSTMCell(args.hid_size, args.hid_size)
 
         if not args.first_graph_complete:
             if args.use_gconv_encoder:
                 self.hard_attn1 = nn.Sequential(
-                    nn.Linear(args.gconv_encoder_out_size*2, int(args.gconv_encoder_out_size/2)),
+                    nn.Linear(args.gconv_encoder_out_size*2, int(args.gconv_encoder_out_size//2)),
                     nn.ReLU(),
-                    nn.Linear(int(args.gconv_encoder_out_size/2), int(args.gconv_encoder_out_size/2)),
+                    nn.Linear(int(args.gconv_encoder_out_size//2), int(args.gconv_encoder_out_size//2)),
                     nn.ReLU(),
-                    nn.Linear(int(args.gconv_encoder_out_size/2), 2))
+                    nn.Linear(int(args.gconv_encoder_out_size//2), 2))
             else:
                 self.hard_attn1 = nn.Sequential(
-                    nn.Linear(self.hid_size*2, int(self.hid_size/2)),
+                    nn.Linear(self.hid_size*2, int(self.hid_size//2)),
                     nn.ReLU(),
-                    nn.Linear(int(self.hid_size/2), int(self.hid_size/8)),
+                    nn.Linear(int(self.hid_size//2), int(self.hid_size//8)),
                     nn.ReLU(),
-                    nn.Linear(int(self.hid_size/8), 2))
+                    nn.Linear(int(self.hid_size//8), 2))
                 
         if args.learn_second_graph and not args.second_graph_complete:
             if args.use_gconv_encoder:
                 self.hard_attn2 = nn.Sequential(
-                    nn.Linear(args.gconv_encoder_out_size*2, int(args.gconv_encoder_out_size/2)),
+                    nn.Linear(args.gconv_encoder_out_size*2, int(args.gconv_encoder_out_size//2)),
                     nn.ReLU(),
-                    nn.Linear(int(args.gconv_encoder_out_size/2), int(args.gconv_encoder_out_size/2)),
+                    nn.Linear(int(args.gconv_encoder_out_size//2), int(args.gconv_encoder_out_size//2)),
                     nn.ReLU(),
-                    nn.Linear(int(args.gconv_encoder_out_size/2), 2))
+                    nn.Linear(int(args.gconv_encoder_out_size//2), 2))
             else:
                 self.hard_attn2 = nn.Sequential(
-                    nn.Linear(self.hid_size*2, int(self.hid_size/2)),
+                    nn.Linear(self.hid_size*2, int(self.hid_size//2)),
                     nn.ReLU(),
-                    nn.Linear(int(self.hid_size/2), int(self.hid_size/8)),
+                    nn.Linear(int(self.hid_size//2), int(self.hid_size//8)),
                     nn.ReLU(),
-                    nn.Linear(int(self.hid_size/8), 2))
+                    nn.Linear(int(self.hid_size//8), 2))
 
         if args.message_encoder:
             self.message_encoder = nn.Linear(args.hid_size, args.hid_size)
@@ -99,13 +99,13 @@ class MAGIC(nn.Module):
 
         num_agents_alive, agent_mask = self.get_agent_mask(batch_size, info)
 
-        hidden_state, cell_state = self.f_module(x.squeeze(), (hidden_state, cell_state))
+        hidden_state, cell_state = self.lstm_cell(x.squeeze(), (hidden_state, cell_state))
 
         comm = hidden_state
         if self.args.message_encoder:
             comm = self.message_encoder(comm)
             
-        # Mask communcation from dead agents (in TJ)
+        # Mask communcation from dead agents (only effective in Traffic Junction)
         comm = comm * agent_mask
         comm_ori = comm.clone()
 
@@ -134,7 +134,7 @@ class MAGIC(nn.Module):
             
         comm = self.gconv2(comm, adj2)
         
-        # Mask communication to dead agents (in TJ)
+        # Mask communication to dead agents (only effective in Traffic Junction)
         comm = comm * agent_mask
         
         if self.args.message_decoder:

@@ -24,8 +24,8 @@ class MAGIC(nn.Module):
         
         dropout = 0
         negative_slope = 0.2
-        self.gconv1 = GraphAttention(args.hid_size, args.gat_hid_size, dropout=dropout, negative_slope=negative_slope, num_heads=args.gat_num_heads, self_loop_type=args.self_loop_type1, average=False, normalize=args.first_gat_normalize)
-        self.gconv2 = GraphAttention(args.gat_hid_size*args.gat_num_heads, args.hid_size, dropout=dropout, negative_slope=negative_slope, num_heads=args.gat_num_heads_out, self_loop_type=args.self_loop_type2, average=True, normalize=args.second_gat_normalize)
+        self.sub_processor1 = GraphAttention(args.hid_size, args.gat_hid_size, dropout=dropout, negative_slope=negative_slope, num_heads=args.gat_num_heads, self_loop_type=args.self_loop_type1, average=False, normalize=args.first_gat_normalize)
+        self.sub_processor2 = GraphAttention(args.gat_hid_size*args.gat_num_heads, args.hid_size, dropout=dropout, negative_slope=negative_slope, num_heads=args.gat_num_heads_out, self_loop_type=args.self_loop_type2, average=True, normalize=args.second_gat_normalize)
         if args.use_gconv_encoder:
             self.gconv_encoder = GraphAttention(args.hid_size, args.gconv_encoder_out_size, dropout=dropout, negative_slope=negative_slope, num_heads=args.ge_num_heads, self_loop_type=1, average=True, normalize=args.gconv_gat_normalize)
 
@@ -37,34 +37,34 @@ class MAGIC(nn.Module):
         if not args.first_graph_complete:
             if args.use_gconv_encoder:
                 self.hard_attn1 = nn.Sequential(
-                    nn.Linear(args.gconv_encoder_out_size*2, int(args.gconv_encoder_out_size//2)),
+                    nn.Linear(args.gconv_encoder_out_size*2, args.gconv_encoder_out_size//2),
                     nn.ReLU(),
-                    nn.Linear(int(args.gconv_encoder_out_size//2), int(args.gconv_encoder_out_size//2)),
+                    nn.Linear(args.gconv_encoder_out_size//2, args.gconv_encoder_out_size//2),
                     nn.ReLU(),
-                    nn.Linear(int(args.gconv_encoder_out_size//2), 2))
+                    nn.Linear(args.gconv_encoder_out_size//2), 2)
             else:
                 self.hard_attn1 = nn.Sequential(
-                    nn.Linear(self.hid_size*2, int(self.hid_size//2)),
+                    nn.Linear(self.hid_size*2, self.hid_size//2),
                     nn.ReLU(),
-                    nn.Linear(int(self.hid_size//2), int(self.hid_size//8)),
+                    nn.Linear(self.hid_size//2, self.hid_size//8),
                     nn.ReLU(),
-                    nn.Linear(int(self.hid_size//8), 2))
+                    nn.Linear(self.hid_size//8), 2)
                 
         if args.learn_second_graph and not args.second_graph_complete:
             if args.use_gconv_encoder:
                 self.hard_attn2 = nn.Sequential(
-                    nn.Linear(args.gconv_encoder_out_size*2, int(args.gconv_encoder_out_size//2)),
+                    nn.Linear(args.gconv_encoder_out_size*2, args.gconv_encoder_out_size//2),
                     nn.ReLU(),
-                    nn.Linear(int(args.gconv_encoder_out_size//2), int(args.gconv_encoder_out_size//2)),
+                    nn.Linear(args.gconv_encoder_out_size//2, args.gconv_encoder_out_size//2),
                     nn.ReLU(),
-                    nn.Linear(int(args.gconv_encoder_out_size//2), 2))
+                    nn.Linear(args.gconv_encoder_out_size//2), 2)
             else:
                 self.hard_attn2 = nn.Sequential(
-                    nn.Linear(self.hid_size*2, int(self.hid_size//2)),
+                    nn.Linear(self.hid_size*2, self.hid_size//2),
                     nn.ReLU(),
-                    nn.Linear(int(self.hid_size//2), int(self.hid_size//8)),
+                    nn.Linear(self.hid_size//2, self.hid_size//8),
                     nn.ReLU(),
-                    nn.Linear(int(self.hid_size//8), 2))
+                    nn.Linear(self.hid_size//8), 2)
 
         if args.message_encoder:
             self.message_encoder = nn.Linear(args.hid_size, args.hid_size)
@@ -119,7 +119,7 @@ class MAGIC(nn.Module):
         else:
             adj1 = self.get_complete_graph(agent_mask)
             
-        comm = F.elu(self.gconv1(comm, adj1))
+        comm = F.elu(self.sub_processor1(comm, adj1))
         
         if self.args.learn_second_graph and not self.args.second_graph_complete:
             if self.args.use_gconv_encoder:
@@ -132,7 +132,7 @@ class MAGIC(nn.Module):
         else:
             adj2 = self.get_complete_graph(agent_mask)
             
-        comm = self.gconv2(comm, adj2)
+        comm = self.sub_processor2(comm, adj2)
         
         # Mask communication to dead agents (only effective in Traffic Junction)
         comm = comm * agent_mask

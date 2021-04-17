@@ -29,7 +29,7 @@ class MAGIC(nn.Module):
         if args.use_gconv_encoder:
             self.gconv_encoder = GraphAttention(args.hid_size, args.gconv_encoder_out_size, dropout=dropout, negative_slope=negative_slope, num_heads=args.ge_num_heads, self_loop_type=1, average=True, normalize=args.gconv_gat_normalize)
 
-        self.encoder = nn.Linear(arg.obs_size, args.hid_size)
+        self.encoder = nn.Linear(args.obs_size, args.hid_size)
 
         self.init_hidden(args.batch_size)
         self.lstm_cell= nn.LSTMCell(args.hid_size, args.hid_size)

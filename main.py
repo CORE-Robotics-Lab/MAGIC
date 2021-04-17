@@ -140,7 +140,7 @@ if args.env_name == 'grf':
     args.render = False
 env = data.init(args.env_name, args, False)
 
-arg.obs_size = env.observation_dim
+args.obs_size = env.observation_dim
 args.num_actions = env.num_actions
 
 # Multi-action

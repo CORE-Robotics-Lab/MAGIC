@@ -41,14 +41,14 @@ class MAGIC(nn.Module):
                     nn.ReLU(),
                     nn.Linear(args.gconv_encoder_out_size//2, args.gconv_encoder_out_size//2),
                     nn.ReLU(),
-                    nn.Linear(args.gconv_encoder_out_size//2), 2)
+                    nn.Linear(args.gconv_encoder_out_size//2, 2))
             else:
                 self.hard_attn1 = nn.Sequential(
                     nn.Linear(self.hid_size*2, self.hid_size//2),
                     nn.ReLU(),
                     nn.Linear(self.hid_size//2, self.hid_size//8),
                     nn.ReLU(),
-                    nn.Linear(self.hid_size//8), 2)
+                    nn.Linear(self.hid_size//8, 2))
                 
         if args.learn_second_graph and not args.second_graph_complete:
             if args.use_gconv_encoder:
@@ -57,14 +57,14 @@ class MAGIC(nn.Module):
                     nn.ReLU(),
                     nn.Linear(args.gconv_encoder_out_size//2, args.gconv_encoder_out_size//2),
                     nn.ReLU(),
-                    nn.Linear(args.gconv_encoder_out_size//2), 2)
+                    nn.Linear(args.gconv_encoder_out_size//2, 2))
             else:
                 self.hard_attn2 = nn.Sequential(
                     nn.Linear(self.hid_size*2, self.hid_size//2),
                     nn.ReLU(),
                     nn.Linear(self.hid_size//2, self.hid_size//8),
                     nn.ReLU(),
-                    nn.Linear(self.hid_size//8), 2)
+                    nn.Linear(self.hid_size//8, 2))
 
         if args.message_encoder:
             self.message_encoder = nn.Linear(args.hid_size, args.hid_size)

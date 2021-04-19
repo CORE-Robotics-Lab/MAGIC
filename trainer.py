@@ -42,7 +42,7 @@ class Trainer(object):
 
         for t in range(self.args.max_steps):
             misc = dict()
-            # recurrence over time
+
             if t == 0:
                 prev_hid = self.policy_net.init_hidden(batch_size=state.shape[0])
 
@@ -103,29 +103,29 @@ class Trainer(object):
 
     def compute_grad(self, batch):
         stat = dict()
-        # action space
+        # num_actions: number of discrete actions in the action space
         num_actions = self.args.num_actions
-        # number of action head
+        # dim_actions: number of action heads
         dim_actions = self.args.dim_actions
 
         n = self.args.nagents
         batch_size = len(batch.state)
 
-        # size: batch_size * n
+        # rewards: [batch_size * n]
         rewards = torch.Tensor(batch.reward)
-        # size: batch_size * n
+        # episode_mask: [batch_size * n]
         episode_masks = torch.Tensor(batch.episode_mask)
-        # size: batch_size * n
+        # episode_mini_mask: [batch_size * n]
         episode_mini_masks = torch.Tensor(batch.episode_mini_mask)
         actions = torch.Tensor(batch.action)
-        # size: batch_size * n * dim_actions.  have been detached
+        # actions: [batch_size * n * dim_actions] have been detached
         actions = actions.transpose(1, 2).view(-1, n, dim_actions)
 
         values = torch.cat(batch.value, dim=0)
         action_out = list(zip(*batch.action_out))
         action_out = [torch.cat(a, dim=0) for a in action_out]
 
-        # size: (batch_size*n)
+        # alive_masks: [batch_size * n]
         alive_masks = torch.Tensor(np.concatenate([item['alive_mask'] for item in batch.misc])).view(-1)
 
         coop_returns = torch.Tensor(batch_size, n)
@@ -157,19 +157,19 @@ class Trainer(object):
         if self.args.normalize_rewards:
             advantages = (advantages - advantages.mean()) / advantages.std()
             
-        # element size: (batch_size*n) * num_actions[i]
+        # element of log_p_a: [(batch_size*n) * num_actions[i]]
         log_p_a = [action_out[i].view(-1, num_actions[i]) for i in range(dim_actions)]
-        # size: (batch_size*n) * dim_actions
+        # actions: [(batch_size*n) * dim_actions]
         actions = actions.contiguous().view(-1, dim_actions)
 
         if self.args.advantages_per_action:
-            # size: (batch_size*n) * dim_actions
+            # log_prob: [(batch_size*n) * dim_actions]
             log_prob = multinomials_log_densities(actions, log_p_a)
             # the log prob of each action head is multiplied by the advantage
             action_loss = -advantages.view(-1).unsqueeze(-1) * log_prob
             action_loss *= alive_masks.unsqueeze(-1)
         else:
-            # size: (batch_size*n) * 1
+            # log_prob: [(batch_size*n) * 1]
             log_prob = multinomials_log_density(actions, log_p_a)
             action_loss = -advantages.view(-1) * log_prob.squeeze()
             action_loss *= alive_masks

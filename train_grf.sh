@@ -17,8 +17,8 @@ python -u main.py \
   --gat_hid_size 128 \
   --gat_num_heads_out 1 \
   --ge_num_heads 8 \
-  --use_gconv_encoder \
-  --gconv_encoder_out_size 32 \
+  --use_gat_encoder \
+  --gat_encoder_out_size 32 \
   --self_loop_type1 2 \
   --self_loop_type2 2 \
   --first_gat_normalize \

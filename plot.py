@@ -140,6 +140,7 @@ def parse_plot(files, term='Reward'):
 #     plt.title('GFootball {} {}'.format(sys.argv[2], term))
 
 files = glob.glob(sys.argv[1] + "*")
+# filter out files with ".pt"
 files = list(filter(lambda x: x.find(".pt") == -1, files))
 
 # 'Epoch'/ 'Steps-taken'

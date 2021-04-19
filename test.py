@@ -42,24 +42,24 @@ parser.add_argument('--self_loop_type1', default=2, type=int,
                     help='self loop type in gnn (0: no self loop, 1: with self loop, 2: decided by hard attn mechanism)')
 parser.add_argument('--self_loop_type2', default=2, type=int,
                     help='self loop type in gnn (0: no self loop, 1: with self loop, 2: decided by hard attn mechanism)')
-parser.add_argument('--gnn_type', default='gat', type=str,
-                    help='type of gnn to use (gcn|gat)')
 parser.add_argument('--gat_num_heads', default=1, type=int,
                     help='number of heads in gat layers except the last one')
 parser.add_argument('--gat_num_heads_out', default=1, type=int,
                     help='number of heads in output gat layer')
 parser.add_argument('--gat_hid_size', default=64, type=int,
                     help='hidden size of one head in gat')
+parser.add_argument('--ge_num_heads', default=4, type=int,
+                    help='number of heads in the gat encoder')
 parser.add_argument('--first_gat_normalize', action='store_true', default=False,
-                    help='if normalize first gat layer')
+                    help='if normalize the coefficients in the first gat layer of the message processor')
 parser.add_argument('--second_gat_normalize', action='store_true', default=False,
-                    help='if normilize second gat layer')
-parser.add_argument('--gconv_gat_normalize', action='store_true', default=False,
-                    help='if normilize gconv gat layer')
-parser.add_argument('--use_gconv_encoder', action='store_true', default=False,
-                    help='if use gconv encoder before learning the first graph')
-parser.add_argument('--gconv_encoder_out_size', default=64, type=int,
-                    help='hidden size of output of the gconv encoder')
+                    help='if normilize the coefficients in the second gat layer of the message proccessor')
+parser.add_argument('--gat_encoder_normalize', action='store_true', default=False,
+                    help='if normilize the coefficients in the gat encoder (they have been normalized if the input graph is complete)')
+parser.add_argument('--use_gat_encoder', action='store_true', default=False,
+                    help='if use gat encoder before learning the first graph')
+parser.add_argument('--gat_encoder_out_size', default=64, type=int,
+                    help='hidden size of output of the gat encoder')
 parser.add_argument('--first_graph_complete', action='store_true', default=False,
                     help='if the first graph is set to a complete graph')
 parser.add_argument('--second_graph_complete', action='store_true', default=False,
@@ -75,12 +75,11 @@ parser.add_argument('--nagents', type=int, default=1,
 parser.add_argument('--mean_ratio', default=0, type=float,
                     help='how much coooperative to do? 1.0 means fully cooperative')
 parser.add_argument('--detach_gap', default=10000, type=int,
-                    help='detach hidden state and cell state for rnns at this interval.'
-                    + ' Default 10000 (very high)')
+                    help='detach hidden state and cell state for rnns at this interval')
 parser.add_argument('--comm_init', default='uniform', type=str,
                     help='how to initialise comm weights [uniform|zeros]')
 parser.add_argument('--advantages_per_action', default=False, action='store_true',
-                    help='Whether to multipy log porb for each chosen action with advantages')
+                    help='whether to multipy log porb for each chosen action with advantages')
 
 # optimization
 parser.add_argument('--gamma', type=float, default=1.0,

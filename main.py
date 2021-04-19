@@ -34,15 +34,16 @@ parser.add_argument('--batch_size', type=int, default=500,
                     help='number of steps before each update (per thread)')
 parser.add_argument('--nprocesses', type=int, default=16,
                     help='How many processes to run')
+
 # model
 parser.add_argument('--hid_size', default=64, type=int,
                     help='hidden layer size')
 parser.add_argument('--directed', action='store_true', default=False,
-                    help='if the graph formed by the agents is directed')
+                    help='whether the communication graph is directed')
 parser.add_argument('--self_loop_type1', default=2, type=int,
-                    help='self loop type in gnn (0: no self loop, 1: with self loop, 2: decided by hard attn mechanism)')
+                    help='self loop type in the first gat layer (0: no self loop, 1: with self loop, 2: decided by hard attn mechanism)')
 parser.add_argument('--self_loop_type2', default=2, type=int,
-                    help='self loop type in gnn (0: no self loop, 1: with self loop, 2: decided by hard attn mechanism)')
+                    help='self loop type in the second gat layer (0: no self loop, 1: with self loop, 2: decided by hard attn mechanism)')
 parser.add_argument('--gat_num_heads', default=1, type=int,
                     help='number of heads in gat layers except the last one')
 parser.add_argument('--gat_num_heads_out', default=1, type=int,
@@ -52,27 +53,27 @@ parser.add_argument('--gat_hid_size', default=64, type=int,
 parser.add_argument('--ge_num_heads', default=4, type=int,
                     help='number of heads in the gat encoder')
 parser.add_argument('--first_gat_normalize', action='store_true', default=False,
-                    help='if normalize the coefficients in the first gat layer of the message processor')
+                    help='whether normalize the coefficients in the first gat layer of the message processor')
 parser.add_argument('--second_gat_normalize', action='store_true', default=False,
-                    help='if normilize the coefficients in the second gat layer of the message proccessor')
+                    help='whether normilize the coefficients in the second gat layer of the message proccessor')
 parser.add_argument('--gat_encoder_normalize', action='store_true', default=False,
-                    help='if normilize the coefficients in the gat encoder (they have been normalized if the input graph is complete)')
+                    help='whether normilize the coefficients in the gat encoder (they have been normalized if the input graph is complete)')
 parser.add_argument('--use_gat_encoder', action='store_true', default=False,
-                    help='if use gat encoder before learning the first graph')
+                    help='whether use the gat encoder before learning the first graph')
 parser.add_argument('--gat_encoder_out_size', default=64, type=int,
                     help='hidden size of output of the gat encoder')
 parser.add_argument('--first_graph_complete', action='store_true', default=False,
-                    help='if the first graph is set to a complete graph')
+                    help='whether the first communication graph is set to a complete graph')
 parser.add_argument('--second_graph_complete', action='store_true', default=False,
-                    help='if the second graph is set to a complete graph')
+                    help='whether the second communication graph is set to a complete graph')
 parser.add_argument('--learn_second_graph', action='store_true', default=False,
-                    help='if learn the second graph used in the second gnn layer')
+                    help='whether learn a new communication graph at the second round of communication')
 parser.add_argument('--message_encoder', action='store_true', default=False,
-                    help='if use message encoder')
+                    help='whether use the message encoder')
 parser.add_argument('--message_decoder', action='store_true', default=False,
-                    help='if use message decoder')
+                    help='whether use the message decoder')
 parser.add_argument('--nagents', type=int, default=1,
-                    help="Number of agents (used in multiagent)")
+                    help="number of agents")
 parser.add_argument('--mean_ratio', default=0, type=float,
                     help='how much coooperative to do? 1.0 means fully cooperative')
 parser.add_argument('--detach_gap', default=10000, type=int,
@@ -82,16 +83,13 @@ parser.add_argument('--comm_init', default='uniform', type=str,
 parser.add_argument('--advantages_per_action', default=False, action='store_true',
                     help='whether to multipy log porb for each chosen action with advantages')
 parser.add_argument('--comm_mask_zero', action='store_true', default=False,
-                    help="Whether block the communication")
-
+                    help="whether block the communication")
 
 # optimization
 parser.add_argument('--gamma', type=float, default=1.0,
                     help='discount factor')
-parser.add_argument('--tau', type=float, default=1.0,
-                    help='gae (remove?)')
 parser.add_argument('--seed', type=int, default=-1,
-                    help='random seed. Pass -1 for random seed') 
+                    help='random seed') 
 parser.add_argument('--normalize_rewards', action='store_true', default=False,
                     help='normalize rewards in each batch')
 parser.add_argument('--lrate', type=float, default=0.001,
@@ -99,16 +97,18 @@ parser.add_argument('--lrate', type=float, default=0.001,
 parser.add_argument('--entr', type=float, default=0,
                     help='entropy regularization coeff')
 parser.add_argument('--value_coeff', type=float, default=0.01,
-                    help='coeff for value loss term')
+                    help='coefficient for value loss term')
+
 # environment
 parser.add_argument('--env_name', default="grf",
                     help='name of the environment to run')
 parser.add_argument('--max_steps', default=20, type=int,
                     help='force to end the game after this many steps')
 parser.add_argument('--nactions', default='1', type=str,
-                    help='the number of agent actions (0 for continuous). Use N:M:K for multiple actions')
+                    help='the number of agent actions')
 parser.add_argument('--action_scale', default=1.0, type=float,
                     help='scale action output from model')
+
 # other
 parser.add_argument('--plot', action='store_true', default=False,
                     help='plot training progress')
@@ -123,7 +123,7 @@ parser.add_argument('--save_every', default=0, type=int,
 parser.add_argument('--load', default='', type=str,
                     help='load the model')
 parser.add_argument('--display', action="store_true", default=False,
-                    help='Display environment state')
+                    help='display environment state')
 parser.add_argument('--random', action='store_true', default=False,
                     help="enable random model")
 

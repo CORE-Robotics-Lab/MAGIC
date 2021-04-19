@@ -51,7 +51,7 @@ This is the codebase for "[Multi-Agent Graph-Attention Communication and Teaming
 ## Training Baselines
 
 ## Visualization
-* Check training process  
+* Check training progress  
   Use visdom with `--plot`. `--plot_env` should be followed by the name of this plotting environment. `--plot_port` should be followed by the port number you want to use.
 * Plot with multiple log files  
   Use plot_script.py (log files in saved/):

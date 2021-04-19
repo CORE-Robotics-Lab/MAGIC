@@ -9,14 +9,32 @@ This is the codebase for "[Multi-Agent Graph-Attention Communication and Teaming
 * Fork from authors' version of [Google Research Football](https://github.com/chrisyrniu/football) 
 
 
-## Install Multi-Agent Environment Wrapper for GRF
-* Each agent will receive a local observation in multi-agent settings 
+## Testing Environment Setup
+* Predator-Prey and Traffic Junction (from IC3Net)
+  ```
+  cd envs/ic3net-envs
+  python setup.py develop
+  ```
+* Google Research Football  
+  Install required apt packages with:  
+  ```
+  sudo apt-get install git cmake build-essential libgl1-mesa-dev libsdl2-dev \
+  libsdl2-image-dev libsdl2-ttf-dev libsdl2-gfx-dev libboost-all-dev \
+  libdirectfb-dev libst-dev mesa-utils xvfb x11vnc libsdl-sge-dev python3-pip
+  ```
+  Install the game of author's version (add multi-agent observations and fixed some bugs):  
+  ```
+  git clone git@github.com:chrisyrniu/football.git
+  cd football
+  pip install .
+  ```
+  Install the multi-agent environment wrapper for GRF (each agent will receive a local observation in multi-agent settings)  
+  ```
+  cd envs/grf-envs
+  python setup.py develop
+  ```
 
-  `cd grf-envs`
-
-  `python setup.py develop`
-
-## Run Training
+## Training MAGIC
 * Predator-Prey 5-agent scenario:
   `sh train_pp_medium.sh`
 * Predator-Prey 10-agent scenario:
@@ -29,14 +47,18 @@ This is the codebase for "[Multi-Agent Graph-Attention Communication and Teaming
   `sh train_tj_hard.sh`
 * Google Research Football 3 vs. 2 (3-agent) scenario:
   `sh train_grf.sh`
+  
+## Training Baselines
 
-## Check Training Process and Results
-* Use visdom
-* Use plot_script.py and saved log file:
-
-  `python plot.py saved/ name Reward`
-
-  `python plot.py saved/ name Steps-Taken`
+## Visualization
+* Check training process  
+  Use visdom with `--plot`. `--plot_env` should be followed by the name of this plotting environment. `--plot_port` should be followed by the port number you want to use.
+* Plot with multiple log files  
+  Use plot_script.py (log files in saved/):
+  ```
+  python plot.py saved/ title Reward
+  python plot.py saved/ title Steps-Taken
+  ```
 
 ## Reference
-The training method is adapted from [IC3Net](https://github.com/IC3Net/IC3Net)
+The training framework is adapted from [IC3Net](https://github.com/IC3Net/IC3Net)

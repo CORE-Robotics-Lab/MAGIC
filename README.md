@@ -35,6 +35,7 @@ This is the codebase for "[Multi-Agent Graph-Attention Communication and Teaming
   ```
 
 ## Training MAGIC
+Run `python main.py --help` to check all the options.
 * Predator-Prey 5-agent scenario:
   `sh train_pp_medium.sh`
 * Predator-Prey 10-agent scenario:

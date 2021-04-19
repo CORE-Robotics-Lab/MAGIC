@@ -140,5 +140,5 @@ class GraphAttention(nn.Module):
         return output
 
     def __repr__(self):
-        return self.__class__.__name__ + 'in_features={}, out_features={}'.format(self.in_features, self.out_features)
+        return self.__class__.__name__ + '(in_features={}, out_features={})'.format(self.in_features, self.out_features)
     

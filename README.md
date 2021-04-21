@@ -36,8 +36,8 @@ This is the codebase for "[Multi-Agent Graph-Attention Communication and Teaming
 
 ## Training MAGIC
 -Run `python main.py --help` to check all the options.  
--Use `first_graph_complete` and `second_graph_complete` to set the corresponding communication graph of the first round and second round to be complete (disable the sub-scheduler), respectively.  
--Use `comm_mask_zero` to block the communication.
+-Use `--first_graph_complete` and `--second_graph_complete` to set the corresponding communication graph of the first round and second round to be complete (disable the sub-scheduler), respectively.  
+-Use `--comm_mask_zero` to block the communication.
 * Predator-Prey 5-agent scenario:
   `sh train_pp_medium.sh`
 * Predator-Prey 10-agent scenario:

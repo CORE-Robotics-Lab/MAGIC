@@ -52,6 +52,23 @@ This is the codebase for "[Multi-Agent Graph-Attention Communication and Teaming
   `sh train_grf.sh`
   
 ## Training Baselines
+-`cd baselines` 
+-Use `--comm_action_one` to force all agents to always communicate all (other) agents. 
+-Use `--comm_mask_zero` to block the communication.
+-Use `--commnet` to enable CommNet, `--ic3net` to enable IC3Net, `tarcomm` and `ic3net` to enable TarMAC-IC3Net, and `gacomm` to enable GAComm. 
+-The learning rate for IC3Net in Google Research Football was adjusted as 0.0007, otherwise it was kept as 0.001.
+* Predator-Prey 5-agent scenario:
+  `sh train_pp_medium.sh`
+* Predator-Prey 10-agent scenario:
+  `sh train_pp_hard.sh`
+* Traffic-Junction 5-agent scenario:
+  `sh train_tj_easy.sh`
+* Traffic-Junction 10-agent scenario:
+  `sh train_tj_medium.sh`
+* Traffic-Junction 20-agent scenario:
+  `sh train_tj_hard.sh`
+* Google Research Football 3 vs. 2 (3-agent) scenario:
+  `sh train_grf.sh`
 
 ## Visualization
 * Check training progress  

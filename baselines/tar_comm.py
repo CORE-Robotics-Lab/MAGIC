@@ -5,8 +5,6 @@ import torch.nn.functional as F
 from torch import nn
 
 from models import MLP
-import sys 
-sys.path.append("..") 
 from action_utils import select_action, translate_action
 
 class TarCommNetMLP(nn.Module):
@@ -192,6 +190,9 @@ class TarCommNetMLP(nn.Module):
             # Choose current or prev depending on recurrent
             comm = hidden_state.view(batch_size, n, self.hid_size) if self.args.recurrent else hidden_state
 
+            if self.args.comm_mask_zero:
+                comm_mask = torch.zeros_like(comm)
+                comm = comm * comm_mask
             #########################################################
             # [TarMAC changeset] Don't expand same comm vector to all
             #########################################################
@@ -238,7 +239,7 @@ class TarCommNetMLP(nn.Module):
 
             # softmax + weighted sum
             attn = F.softmax(scores, dim=-1)
-            # if the scores are all -1e9 for all agents, the attns should be all 0
+            # if the scores are all -1e9 for all agents, the attns should be all 0 (fixed from the original version)
             attn = attn * agent_mask.squeeze(-1) # cannot use inplace operation *=
             comm = torch.matmul(attn, value)
             

@@ -30,9 +30,5 @@ python -u main.py \
   --num_controlled_ragents 0 \
   --reward_type scoring \
   --save \
-  --save_every 200 \
-  --seed 5678 \
-  --plot \
-  --plot_env magic_grf_seed_5678 \
-  --plot_port 8009 \
+  --seed 0 \
   | tee train_grf.log

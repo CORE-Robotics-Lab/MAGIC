@@ -1,7 +1,7 @@
 #!/bin/bash
 export OMP_NUM_THREADS=1
 
-python -u main.py \
+python -u run_baselines.py \
   --env_name traffic_junction \
   --nagents 10 \
   --dim 14 \

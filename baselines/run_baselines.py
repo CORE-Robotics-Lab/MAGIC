@@ -8,13 +8,15 @@ from pathlib import Path
 import numpy as np
 import torch
 import visdom
-import data
 from comm import CommNetMLP
 from ga_comm import GACommNetMLP
 from tar_comm import TarCommNetMLP
+from trainer import Trainer
+
+sys.path.append("..") 
+import data
 from utils import *
 from action_utils import parse_action_args
-from trainer import Trainer
 from multi_processing import MultiProcessTrainer
 # import gym
 

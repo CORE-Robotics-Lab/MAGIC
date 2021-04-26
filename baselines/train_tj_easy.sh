@@ -23,7 +23,4 @@ python -u run_baselines.py \
   --curr_end 0 \
   --save \
   --seed 0 \
-  --plot \
-  --plot_env clean_up_try \
-  --plot_port 8009 \
   | tee train_tj_easy.log

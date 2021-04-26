@@ -7,6 +7,8 @@ from torch import nn
 import numpy as np
 
 from models import MLP
+import sys 
+sys.path.append("..") 
 from action_utils import select_action, translate_action
 
 class GACommNetMLP(nn.Module):

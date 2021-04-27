@@ -6,7 +6,7 @@ import torch.nn.functional as F
     
 class GraphAttention(nn.Module):
     """
-    Graph-Attentional layer used in MAGIC that can process differential communication graphs
+    Graph-Attentional layer used in MAGIC that can process differentiable communication graphs
     """
 
     def __init__(self, in_features, out_features, dropout, negative_slope, num_heads=1, bias=True, self_loop_type=2, average=False, normalize=False):

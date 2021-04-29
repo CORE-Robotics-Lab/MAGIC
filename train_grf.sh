@@ -5,7 +5,7 @@ python -u main.py \
   --env_name grf \
   --nagents 3 \
   --nprocesses 16 \
-  --num_epochs 300 \
+  --num_epochs 500 \
   --epoch_size 10 \
   --hid_size 128 \
   --detach_gap 10 \

@@ -3,7 +3,7 @@ This is the codebase for "[Multi-Agent Graph-Attention Communication and Teaming
 
 ## Requirements
 * OpenAI Gym
-* PyTorch 1.5
+* PyTorch 1.5 (CPU)
 * [visdom](https://github.com/facebookresearch/visdom)
 * Predator-Prey and Traffic Junction [Environments](https://github.com/apsdehal/ic3net-envs)
 * Fork from authors' version of [Google Research Football](https://github.com/chrisyrniu/football) 

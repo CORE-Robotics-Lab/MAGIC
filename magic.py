@@ -91,8 +91,6 @@ class MAGIC(nn.Module):
                                         for o in args.naction_heads])
         # initialize the value head
         self.value_head = nn.Linear(2 * self.hid_size, 1)
-        
-        self.tanh = nn.Tanh()
 
 
     def forward(self, x, info={}):

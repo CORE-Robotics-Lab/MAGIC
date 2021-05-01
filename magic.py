@@ -76,14 +76,14 @@ class MAGIC(nn.Module):
             self.message_decoder = nn.Linear(args.hid_size, args.hid_size)
 
         # initialize weights as 0
-        if args.learn_second_graph and args.comm_init == 'zeros':
+        if args.comm_init == 'zeros':
             if args.message_encoder:
                 self.message_encoder.weight.data.zero_()
             if args.message_decoder:
                 self.message_decoder.weight.data.zero_()
             if not args.first_graph_complete:
                 self.sub_scheduler_mlp1.apply(self.init_linear)
-            if not args.second_graph_complete:
+            if args.learn_second_graph and not args.second_graph_complete:
                 self.sub_scheduler_mlp2.apply(self.init_linear)
                    
         # initialize the action head (in practice, one action head is used)

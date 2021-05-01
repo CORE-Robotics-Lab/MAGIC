@@ -154,7 +154,11 @@ class MAGIC(nn.Module):
         # sub-scheduler 2
         if self.args.learn_second_graph and not self.args.second_graph_complete:
             if self.args.use_gat_encoder:
-                encoded_state2 = encoded_state1
+                if self.args.first_graph_complete:
+                    adj_complete = self.get_complete_graph(agent_mask)
+                    encoded_state2 = self.gat_encoder(comm_ori, adj_complete)
+                else:
+                    encoded_state2 = encoded_state1
                 adj2 = self.sub_scheduler(self.sub_scheduler_mlp2, encoded_state2, agent_mask, self.args.directed)
             else:
                 adj2 = self.sub_scheduler(self.sub_scheduler_mlp2, comm_ori, agent_mask, self.args.directed)

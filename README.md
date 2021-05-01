@@ -53,6 +53,7 @@ This is the codebase for "[Multi-Agent Graph-Attention Communication and Teaming
   
 ## Training Baselines
 -`cd baselines`  
+-Run `python run_baselines.py --help` to check all the options.  
 -Use `--comm_action_one` to force all agents to always communicate all (other) agents.  
 -Use `--comm_mask_zero` to block the communication.  
 -Use `--commnet` to enable CommNet, `--ic3net` to enable IC3Net, `--tarcomm` and `--ic3net` to enable TarMAC-IC3Net, and `--gacomm` to enable GA-Comm.  

@@ -1,6 +1,8 @@
 # MAGIC Implementation
 This is the codebase for "[Multi-Agent Graph-Attention Communication and Teaming](http://www.ifaamas.org/Proceedings/aamas2021/pdfs/p964.pdf)," which is published in [AAMAS 2021](https://aamas2021.soton.ac.uk/). The presentation video of this work can be found [here](https://slideslive.com/38954819/multiagent-graph-attention-communication-and-teaming). The implementation is in three domains including Predator-Prey, Traffic-Junction, and Google Researh Football.
 
+Authors: [Yaru Niu*](https://www.yaruniu.com/), [Rohan Paleja*](https://rohanpaleja.com/), [Matthew Gombolay](https://core-robotics.gatech.edu/people/matthew-gombolay/)
+
 ## Requirements
 * OpenAI Gym
 * PyTorch 1.5 (CPU)
@@ -22,7 +24,7 @@ This is the codebase for "[Multi-Agent Graph-Attention Communication and Teaming
   libsdl2-image-dev libsdl2-ttf-dev libsdl2-gfx-dev libboost-all-dev \
   libdirectfb-dev libst-dev mesa-utils xvfb x11vnc libsdl-sge-dev python3-pip
   ```
-  Install the game of author's version (add multi-agent observations and fixed some bugs):  
+  Install the game of author's version (added multi-agent observations and fixed some bugs):  
   ```
   git clone git@github.com:chrisyrniu/football.git
   cd football
@@ -80,6 +82,18 @@ This is the codebase for "[Multi-Agent Graph-Attention Communication and Teaming
   python plot.py saved/ title Reward
   python plot.py saved/ title Steps-Taken
   ```
+
+## Citation
+If you find our paper and repo helpful to your research, please consider citing the paper:
+```
+@inproceedings{niu2021multi,
+  title={Multi-Agent Graph-Attention Communication and Teaming},
+  author={Niu, Yaru and Paleja, Rohan and Gombolay, Matthew},
+  booktitle={Proceedings of the 20th International Conference on Autonomous Agents and MultiAgent Systems},
+  pages={964--973},
+  year={2021}
+}
+```
 
 ## Reference
 The training framework is adapted from [IC3Net](https://github.com/IC3Net/IC3Net)

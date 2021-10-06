@@ -1,5 +1,5 @@
 # MAGIC Implementation
-This is the codebase for "[Multi-Agent Graph-Attention Communication and Teaming](http://www.ifaamas.org/Proceedings/aamas2021/pdfs/p964.pdf)," which is published in [AAMAS 2021](https://aamas2021.soton.ac.uk/). The presentation video of this work can be found [here](https://slideslive.com/38954819/multiagent-graph-attention-communication-and-teaming). A short video demo can be found [here](https://youtu.be/32zZdjC4-6A). The implementation is in three domains including Predator-Prey, Traffic-Junction, and Google Researh Football.
+This is the codebase for "[Multi-Agent Graph-Attention Communication and Teaming](http://www.ifaamas.org/Proceedings/aamas2021/pdfs/p964.pdf)," which is published in [AAMAS 2021](https://aamas2021.soton.ac.uk/) and presented at [ICCV 2021 Mair2 Workshop](https://www.mair2.com/home). The presentation video of this work can be found [here](https://slideslive.com/38954819/multiagent-graph-attention-communication-and-teaming). A short video demo can be found [here](https://youtu.be/32zZdjC4-6A). The implementation is in three domains including Predator-Prey, Traffic-Junction, and Google Researh Football.
 
 Authors: [Yaru Niu*](https://www.yaruniu.com/), [Rohan Paleja*](https://rohanpaleja.com/), [Matthew Gombolay](https://core-robotics.gatech.edu/people/matthew-gombolay/)
 

@@ -26,7 +26,7 @@ Authors: [Yaru Niu*](https://www.yaruniu.com/), [Rohan Paleja*](https://rohanpal
   ```
   Install the game of author's version (added multi-agent observations and fixed some bugs):  
   ```
-  git clone git@github.com:chrisyrniu/football.git
+  git clone https://github.com/chrisyrniu/football.git
   cd football
   pip install .
   ```

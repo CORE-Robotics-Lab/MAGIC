@@ -139,7 +139,6 @@ class PredatorPreyEnv(gym.Env):
 
         self.episode_over = False
         self.obs = self._get_obs()
-        print('obs', self.obs[0])
 
         debug = {'predator_locs':self.predator_loc,'prey_locs':self.prey_loc}
         return self.obs, self._get_reward(), self.episode_over, debug
@@ -166,7 +165,7 @@ class PredatorPreyEnv(gym.Env):
 
         # Observation will be npredator * vision * vision ndarray
         self.obs = self._get_obs()
-        # print('obs', self.obs.shape)
+
         return self.obs
 
     def seed(self):
@@ -178,36 +177,28 @@ class PredatorPreyEnv(gym.Env):
 
     def _set_grid(self):
         self.grid = np.arange(self.BASE).reshape(self.dims)
-        # print('grid1', self.grid)
         # Mark agents in grid
         # self.grid[self.predator_loc[:,0], self.predator_loc[:,1]] = self.predator_ids
         # self.grid[self.prey_loc[:,0], self.prey_loc[:,1]] = self.prey_ids
 
         # Padding for vision
         self.grid = np.pad(self.grid, self.vision, 'constant', constant_values = self.OUTSIDE_CLASS)
-        # print('grid2', self.grid)
 
         self.empty_bool_base_grid = self._onehot_initialization(self.grid)
 
     def _get_obs(self):
         self.bool_base_grid = self.empty_bool_base_grid.copy()
-        # print('bool_base_grid', self.bool_base_grid[5,5,:])
 
         for i, p in enumerate(self.predator_loc):
             self.bool_base_grid[p[0] + self.vision, p[1] + self.vision, self.PREDATOR_CLASS] += 1
-        # print('predator_class', self.PREDATOR_CLASS)
 
         for i, p in enumerate(self.prey_loc):
             self.bool_base_grid[p[0] + self.vision, p[1] + self.vision, self.PREY_CLASS] += 1
-        # print('prey_class', self.PREY_CLASS)
 
-        # print('predator_loc', self.predator_loc)
         obs = []
         for p in self.predator_loc:
             slice_y = slice(p[0], p[0] + (2 * self.vision) + 1)
             slice_x = slice(p[1], p[1] + (2 * self.vision) + 1)
-            # print('slice_y', slice_y)
-            # print('slice_x', slice_x)
             obs.append(self.bool_base_grid[slice_y, slice_x])
 
         if self.enemy_comm:
@@ -216,7 +207,6 @@ class PredatorPreyEnv(gym.Env):
                 slice_x = slice(p[1], p[1] + (2 * self.vision) + 1)
                 obs.append(self.bool_base_grid[slice_y, slice_x])
 
-        # print('obs', obs[0].shape)
         obs = np.stack(obs)
         return obs
 
@@ -283,7 +273,6 @@ class PredatorPreyEnv(gym.Env):
 
         if np.all(self.reached_prey == 1) and self.mode == 'mixed':
             self.episode_over = True
-            print('yeahhhhhh')
 
         # Prey reward
         if nb_predator_on_prey == 0:
@@ -308,9 +297,6 @@ class PredatorPreyEnv(gym.Env):
     def _onehot_initialization(self, a):
         ncols = self.vocab_size
         out = np.zeros(a.shape + (ncols,), dtype=int)
-        # print(type(a.shape))
-        # print(a.shape)
-        # print(a.shape + (ncols,))
         out[self._all_idx(a, axis=2)] = 1
         return out
 

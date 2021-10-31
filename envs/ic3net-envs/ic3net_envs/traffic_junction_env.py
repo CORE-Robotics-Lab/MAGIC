@@ -300,13 +300,11 @@ class TrafficJunctionEnv(gym.Env):
     def _set_grid(self):
         self.grid = np.full(self.dims[0] * self.dims[1], self.OUTSIDE_CLASS, dtype=int).reshape(self.dims)
         w, h = self.dims
-        # print('grid1', self.grid)
 
         # Mark the roads
         roads = get_road_blocks(w,h, self.difficulty)
         for road in roads:
             self.grid[road] = self.ROAD_CLASS
-        # print('road', self.grid)
         if self.vocab_type == 'bool':
             self.route_grid = self.grid.copy()
             start = 0
@@ -317,14 +315,12 @@ class TrafficJunctionEnv(gym.Env):
 
         # Padding for vision
         self.pad_grid = np.pad(self.grid, self.vision, 'constant', constant_values = self.OUTSIDE_CLASS)
-        # print('grid2', self.pad_grid)
 
         self.empty_bool_base_grid = self._onehot_initialization(self.pad_grid)
 
     def _get_obs(self):
         h, w = self.dims
         self.bool_base_grid = self.empty_bool_base_grid.copy()
-        # print('bool_base_grid', self.bool_base_grid[0,4,:])
 
         # Mark cars' location in Bool grid
         for i, p in enumerate(self.car_loc):
@@ -343,7 +339,6 @@ class TrafficJunctionEnv(gym.Env):
 
             # route id
             r_i = self.route_id[i] / (self.npath - 1)
-            # print('route id', self.route_id[i])
 
             # loc
             p_norm = p / (h-1, w-1)
@@ -367,7 +362,6 @@ class TrafficJunctionEnv(gym.Env):
             obs.append(o)
 
         obs = tuple(obs)
-        # print('obs', obs[0][2].shape)
         return obs
 
 
@@ -534,10 +528,8 @@ class TrafficJunctionEnv(gym.Env):
             next_dif = np.abs(next_dif[:-1])
             step_jump = np.sum(next_dif, axis =1)
             if np.any(step_jump != 1):
-                print("Any", p, i)
                 return False
             if not np.all(step_jump == 1):
-                print("All", p, i)
                 return False
         return True
 
@@ -560,7 +552,6 @@ class TrafficJunctionEnv(gym.Env):
             prev = self.car_route_loc[idx]
             self.car_route_loc[idx] += 1
             curr = self.car_route_loc[idx]
-            # print('curr1', curr)
 
             # car/agent has reached end of its path
             if curr == len(self.chosen_path[idx]):
@@ -574,13 +565,10 @@ class TrafficJunctionEnv(gym.Env):
                 return
 
             elif curr > len(self.chosen_path[idx]):
-                print(curr)
                 raise RuntimeError("Out of boud car path")
 
             prev = self.chosen_path[idx][prev]
             curr = self.chosen_path[idx][curr]
-
-            # print('curr2', curr)
 
             # assert abs(curr[0] - prev[0]) + abs(curr[1] - prev[1]) == 1 or curr_path = 0
             self.car_loc[idx] = curr
